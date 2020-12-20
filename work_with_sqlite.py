@@ -1,37 +1,42 @@
 
 def add_subject(name):
     # without debug
-    insert(f"INSERT INTO subjects (name) VALUES({name!r});")
-    return get(f"SELECT id from subjects WHERE name = {name!r};")[0][0]
+    if len(get(f"SELECT id from tasks WHERE name = {name!r};")) != 0:
+        return "ERROR"
+    insert(f"INSERT INTO tasks (id_subject, data) VALUES({id_subject!r}, {text!r});")
+    return get(f"SELECT id from tasks WHERE id_subject = {id_subject!r} and data = {text!r};")[0][0]
 
 
-def add_task(any_json):
-    # without debug                                     ?V
-    insert(f"INSERT INTO tasks (id_subject, data) VALUES(1, {any_json!r});")
+def add_task(any_json, id_subject):
+    # without debug
+    if len(get(f"SELECT id from tasks WHERE data = {any_json!r};")) != 0:
+        return "ERROR"
+    insert(f"INSERT INTO tasks (id_subject, data) VALUES({id_subject}, {any_json!r});")
     return get(f"SELECT id from tasks WHERE data = {any_json!r};")[0][0]
 
 
 def add_class(name):
     # without debug
+    if len(get(f"SELECT id from students WHERE class = {name!r};")) != 0:
+        return "ERROR"
     insert(f"INSERT INTO classes (name) VALUES({name!r});")
     return get(f"SELECT id from classes WHERE name = {name!r};")[0][0]
 
 
-def add_test(name, task_list:str):
+def add_test(name, task_list:str, id_class):
     # without debug
-    # Можно сделать проверку, существует ли тест с таким названием        ?V
-    insert(f"INSERT INTO tests (name, id_class, list_tasks) VALUES({name}, 1, {task_list});")
+    if len(get(f"SELECT id from tests WHERE name = {name!r};")) != 0:
+        return "ERROR"
+    insert(f"INSERT INTO tests (name, id_class, list_tasks) VALUES({name}, {id_class}, {task_list});")
     return get(f"SELECT id from test WHERE name = {name!r};")[0][0]
 
 
-def add_answer(any_json):
-    # without debug                                                ?V ?V
-    insert(f"INSERT INTO answers (id_task, id_student, data) VALUES(1, 1, {any_json!r});")
+def add_answer(any_json, id_task, id_student):
+    # without debug
+    if len(get(f"SELECT id from answers WHERE data = {any_json!r};")) != 0:
+        return "ERROR"
+    insert(f"INSERT INTO answers (id_task, id_student, data) VALUES({id_task}, {id_student}, {any_json!r});")
     return get(f"SELECT id from answers WHERE data = {any_json!r};")[0][0]
-
-
-def delete_anything():
-    ...
 
 
 def get_all_users():
